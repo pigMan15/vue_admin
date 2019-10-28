@@ -18,7 +18,7 @@
                 </el-date-picker>
         </el-form-item>
         <el-button type="primary" @click="fetchData()">查询</el-button>
-        <el-button type="primary" @click="dialogFormVisible = true">新增</el-button>
+        <el-button type="primary" @click="handleEdit('')">新增</el-button>
     </el-form>
     <el-table
     :data="list"
@@ -66,7 +66,22 @@
       label="活动地址"
       width="180">
     </el-table-column>
+    <el-table-column label="操作" fixed="right" width="100">
+      <template slot-scope="scope">
+        <el-button
+          size="small"
+          type="text"
+          @click="handleEdit(scope.row.id)">修改</el-button>
+        <el-button
+          size="small"
+          type="text"
+          @click="handleDelete(scope.row.id)">删除</el-button>
+      </template>
+    </el-table-column>
   </el-table>
+
+
+
   <el-pagination
       @size-change="fetchData"
       @current-change="fetchData"
@@ -121,14 +136,14 @@
         <el-form-item label="是否可见">
             <el-switch
                 v-model="pojo.status"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
+                active-color="#ff4949"
+                inactive-color="#13ce66"
                 active-value="1"
                 inactive-value="0">
             </el-switch>
         </el-form-item>
         <el-form-item>
-              <el-button >保存</el-button>
+              <el-button @click="handleSave()">保存</el-button>
               <el-button type="primary" @click="dialogFormVisible = false">关闭</el-button>
         </el-form-item>
     </el-form>
@@ -149,7 +164,8 @@ export default {
             searchMap:{},
             dialogFormVisible:false,//编辑窗口是否可见
             pojo:{},//活动对应的实体类型
-            cityList:{},
+            cityList:{},//城市列表
+            id:'',//当前编辑的ID
         }
     },
     created(){
@@ -168,6 +184,55 @@ export default {
                 this.total = response.data.total;
             })
       },
+      handleSave(pojo){
+          gatheringApi.update(this.id,this.pojo).then((response) => {
+              this.$notify({
+                title: 'message',
+                message: response.message,
+                duration: 1000,
+                type: (response.flag?'success':'error')
+              });
+              if(response.flag){
+                  this.fetchData();
+              }
+          })
+          this.dialogFormVisible = false
+      },
+      handleEdit(id){
+          this.dialogFormVisible = true
+          this.id = id
+          //id不为空，则为编辑当前id对象功能
+          if(id != ''){
+            gatheringApi.findById(id).then((response) => {
+                if(response.flag){
+                    this.pojo = response.data;
+                }
+            })
+          }
+          //如果id为空，则为新增功能
+          if(id == ''){
+              this.pojo = {}
+          }
+      },
+      handleDelete(id){
+         this.$confirm('确定要删除此纪录吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {          
+          gatheringApi.deleteById(id).then(response=>{
+            this.$notify({
+              message: response.message,
+              duration: 1000,
+              type: (response.flag?'success':'error')
+            })  
+            if(response.flag){
+              this.fetchData()// 刷新数据
+            }
+         })
+        }).catch(() => {                
+        });
+      }
        
     }
 }

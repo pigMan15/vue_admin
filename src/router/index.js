@@ -96,79 +96,26 @@ export const constantRouterMap = [{
         }]
     },
     {
-        path: '/guide',
+        path: '/recruit',
         component: Layout,
+        name: 'recruit',
+        meta: { title: '招聘管理', icon: 'example' },
         children: [{
-            path: 'guide',
-            name: 'guide',
-            component: () =>
-                import ('@/views/guide/index'),
-            meta: { title: 'guide', icon: 'form' }
-        }]
-    },
-
-    {
-        path: '/nested',
-        component: Layout,
-        redirect: '/nested/menu1',
-        name: 'Nested',
-        meta: {
-            title: 'Nested',
-            icon: 'nested'
-        },
-        children: [{
-                path: 'menu1',
+                path: 'enterprise',
+                name: 'enterprise',
                 component: () =>
-                    import ('@/views/nested/menu1/index'), // Parent router-view
-                name: 'Menu1',
-                meta: { title: 'Menu1' },
-                children: [{
-                        path: 'menu1-1',
-                        component: () =>
-                            import ('@/views/nested/menu1/menu1-1'),
-                        name: 'Menu1-1',
-                        meta: { title: 'Menu1-1' }
-                    },
-                    {
-                        path: 'menu1-2',
-                        component: () =>
-                            import ('@/views/nested/menu1/menu1-2'),
-                        name: 'Menu1-2',
-                        meta: { title: 'Menu1-2' },
-                        children: [{
-                                path: 'menu1-2-1',
-                                component: () =>
-                                    import ('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                                name: 'Menu1-2-1',
-                                meta: { title: 'Menu1-2-1' }
-                            },
-                            {
-                                path: 'menu1-2-2',
-                                component: () =>
-                                    import ('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                                name: 'Menu1-2-2',
-                                meta: { title: 'Menu1-2-2' }
-                            }
-                        ]
-                    },
-                    {
-                        path: 'menu1-3',
-                        component: () =>
-                            import ('@/views/nested/menu1/menu1-3'),
-                        name: 'Menu1-3',
-                        meta: { title: 'Menu1-3' }
-                    }
-                ]
+                    import ('@/views/table/enterprise'),
+                meta: { title: '企业管理', icon: 'table' }
             },
             {
-                path: 'menu2',
+                path: 'recruit',
+                name: 'recruit',
                 component: () =>
-                    import ('@/views/nested/menu2/index'),
-                meta: { title: 'menu2' }
+                    import ('@/views/table/recruit'),
+                meta: { title: '招聘管理', icon: 'tree' }
             }
         ]
     },
-
     {
         path: 'external-link',
         component: Layout,
